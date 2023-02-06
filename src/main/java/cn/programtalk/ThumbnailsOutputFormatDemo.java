@@ -15,7 +15,10 @@ public class ThumbnailsOutputFormatDemo {
         }
         Thumbnails.of("input/wx.png")
                 .scale(1.75)
+                // 如果不设置默认跟原图片一致
                 .outputFormat("JPG")
-                .toFile("output/o1.png");
+                // 设置质量
+                .outputQuality(1F)
+                .toFile("output/o1");
     }
 }
