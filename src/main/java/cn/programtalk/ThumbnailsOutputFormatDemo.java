@@ -1,10 +1,8 @@
 package cn.programtalk;
 
 import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.geometry.Positions;
 
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 
 public class ThumbnailsOutputFormatDemo {
