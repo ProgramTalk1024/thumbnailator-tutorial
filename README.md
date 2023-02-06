@@ -446,3 +446,154 @@ public class ThumbnailsOutputQualityDemo {
 }
 ```
 
+
+
+## 输出到文件
+
+### 单文件
+
+使用`toFile`方法，将处理后的文件输出到指定文件，参数是文件路径，不是必须要指定文件后缀。
+
+`toFile`要求文件读入的时候必须是单个源，例如如果是` Thumbnails.of("input/logo.jpg","input/logo2.jpg")`，使用`toFile`输出会抛出异常。
+
+```java
+package cn.programtalk;
+
+import net.coobird.thumbnailator.Thumbnails;
+
+import javax.imageio.ImageIO;
+import java.io.IOException;
+
+public class ThumbnailsToFileDemo {
+    public static void main(String[] args) throws IOException {
+        Thumbnails.of("input/logo.jpg")
+                .scale(1.75)
+                // 默认如果文件已经存在，则不覆盖，可以设置allowOverwrite=true。
+                .allowOverwrite(true)
+                // 可以不指定文件后缀，默认是png
+                .toFile("output/logo-new");
+    }
+}
+```
+
+
+
+默认如果文件已经存在，则不覆盖，可以设置allowOverwrite=true。
+
+
+
+### 多文件
+
+批量接入的文件处理完毕后，可以通过`toFiles`输出到指定目录下。
+
+`toFiles`有三种多态方法
+
+```
+public void toFiles(File destinationDir, Rename rename) throws IOException // ①
+public void toFiles(Rename rename) throws IOException // ②
+public void toFiles(Iterable<File> iterable) throws IOException { // ③
+```
+
+
+
+①：第一个参数是文件夹路径，第二个参数是文件名处理类型。
+
+`NO_CHANGE`：文件名不修改。
+
+`PREFIX_DOT_THUMBNAIL`：追加 `thumbnail. `到文件名的开头。例如，给定 `picture.jpg`，结果为` thumbnail.picture.jpg`。
+
+`SUFFIX_DOT_THUMBNAIL`：`.thumbnail`追加到文件扩展名之前的文件名。例如，给定 `picture.jpg`，结果为 `picture.thumbnail.jpg`
+
+`SUFFIX_HYPHEN_THUMBNAIL`：`-thumbnail`追加到文件扩展名之前的文件名。例如，给定 `picture.jpg`，结果为 `picture-thumbnail.jpg`。
+
+②：此方法是①的简化，等价于①中的第一个参数`destinationDir`为空。
+
+③：参数是`Iterable`类型，也就是说可以给每个文件设置输出文件名。
+
+
+
+代码示例如下：
+
+```java
+package cn.programtalk;
+
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.name.Rename;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+public class ThumbnailsToFilesDemo {
+    public static void main(String[] args) throws IOException {
+        Thumbnails.of("input/logo.jpg", "input/logo.png")
+                .scale(1.75)
+                // 默认如果文件已经存在，则不覆盖，可以设置allowOverwrite=true。
+                .allowOverwrite(true)
+                // 可以不指定文件后缀，默认是png
+                //.toFiles(new File("output"), Rename.NO_CHANGE);
+                //.toFiles(Rename.NO_CHANGE);
+                .toFiles(List.of(new File("output/1"), new File("output/2")));
+    }
+}
+```
+
+
+
+## 输出到输出流
+
+### 单流
+
+`toOutputStream`是将一个文件输出到输出流中。
+
+```java
+package cn.programtalk;
+
+import net.coobird.thumbnailator.Thumbnails;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+public class ThumbnailsToOutputStreamDemo {
+    public static void main(String[] args) throws IOException {
+        OutputStream os = new FileOutputStream("output/logo.png");
+        Thumbnails.of("input/logo.jpg")
+                .scale(1.75)
+                .toOutputStream(os);
+    }
+}
+```
+
+
+
+### 多流
+
+`toOutputStreams`是将一个文件输出到输出流中。
+
+```
+package cn.programtalk;
+
+import net.coobird.thumbnailator.Thumbnails;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+
+public class ThumbnailsToOutputStreamsDemo {
+    public static void main(String[] args) throws IOException {
+        Thumbnails.of("input/logo.jpg", "input/logo.png")
+                .scale(1.75)
+                // 这里文件后缀最好指定，写入到磁盘的文件没有文件后缀。
+                .toOutputStreams(List.of(new FileOutputStream("output/1.jpg"), new FileOutputStream("output/2.png")));
+    }
+}
+```
+
+
+
+---
+
+
+
+Bye~~~
