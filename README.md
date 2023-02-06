@@ -569,7 +569,7 @@ public class ThumbnailsToOutputStreamDemo {
 
 ### 多流
 
-`toOutputStreams`是将一个文件输出到输出流中。
+`toOutputStreams`是将一个文件输出到多个输出流中。
 
 ```
 package cn.programtalk;
@@ -592,8 +592,10 @@ public class ThumbnailsToOutputStreamsDemo {
 
 
 
+
+
 ---
 
 
 
-Bye~~~
+github：https://github.com/ProgramTalk1024/thumbnailator-tutorial.git
